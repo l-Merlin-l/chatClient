@@ -1,3 +1,4 @@
+import history.FileHistory;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
@@ -34,7 +35,7 @@ public class AuthController {
                     String strFromServer = in.readUTF();
                     if (strFromServer.startsWith("/authok")) {
                         Config.nick = strFromServer.split(" ")[1];
-                        history.Config.setLogin(loginTF.getText());
+                        FileHistory.setLogin(loginTF.getText());
                         Platform.runLater(() -> {
                             Stage stage = (Stage) loginTF.getScene().getWindow();
                             stage.close();

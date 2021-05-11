@@ -6,10 +6,10 @@ public class WriteHistoryMsg implements Closeable {
     DataOutputStream historyMsg;
 
     public WriteHistoryMsg() throws IOException {
-        historyMsg = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(Config.getHistory(), true), 512));
+        historyMsg = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(FileHistory.getHistory(), true), 512));
     }
 
-    public void write(String msg){
+    public void write(String msg) {
         try {
             historyMsg.writeUTF("\n" + msg);
         } catch (IOException e) {
