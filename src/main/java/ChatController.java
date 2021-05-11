@@ -1,3 +1,4 @@
+import history.WriteHistoryMsg;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -58,7 +59,7 @@ public class ChatController {
         out = new DataOutputStream(socket.getOutputStream());
 
         new Thread(() -> {
-            try {
+            try (WriteHistoryMsg historyMsg = new WriteHistoryMsg()){
                 while (socket.isConnected()) {
                     String strFromServer = in.readUTF();
                     if (strFromServer.equalsIgnoreCase("/end")) {
@@ -66,6 +67,7 @@ public class ChatController {
                         break;
                     }
                     chatArea.appendText(strFromServer + "\n");
+                    historyMsg.write(strFromServer);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

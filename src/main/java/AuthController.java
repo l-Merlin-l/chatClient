@@ -34,6 +34,7 @@ public class AuthController {
                     String strFromServer = in.readUTF();
                     if (strFromServer.startsWith("/authok")) {
                         Config.nick = strFromServer.split(" ")[1];
+                        history.Config.setLogin(loginTF.getText());
                         Platform.runLater(() -> {
                             Stage stage = (Stage) loginTF.getScene().getWindow();
                             stage.close();
