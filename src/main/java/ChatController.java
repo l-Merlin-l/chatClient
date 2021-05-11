@@ -1,3 +1,4 @@
+import history.ReadHistoryMsg;
 import history.WriteHistoryMsg;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,6 +16,7 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.List;
 
 public class ChatController {
     private Socket socket;
@@ -54,6 +56,8 @@ public class ChatController {
     }
 
     private void openConnection() throws IOException {
+        history();
+
         socket = ServerConnection.getSocket();
         in = new DataInputStream(socket.getInputStream());
         out = new DataOutputStream(socket.getOutputStream());
@@ -63,10 +67,10 @@ public class ChatController {
                 while (socket.isConnected()) {
                     String strFromServer = in.readUTF();
                     if (strFromServer.equalsIgnoreCase("/end")) {
-                        chatArea.appendText("Подключение отключено");
+                        writeChat("Подключение отключено");
                         break;
                     }
-                    chatArea.appendText(strFromServer + "\n");
+                    writeChat(strFromServer);
                     historyMsg.write(strFromServer);
                 }
             } catch (Exception e) {
@@ -81,6 +85,13 @@ public class ChatController {
                 }
             }
         }).start();
+    }
+
+    private void history() {
+        List<String> historyMsg = ReadHistoryMsg.ReadHistoryMsg();
+        historyMsg.forEach(e -> {
+            writeChat(e);
+        });
     }
 
     private void addCloseListener() {
@@ -120,5 +131,9 @@ public class ChatController {
                 alert.show();
             }
         }
+    }
+
+    private void writeChat(String text){
+        chatArea.appendText(text + "\n");
     }
 }

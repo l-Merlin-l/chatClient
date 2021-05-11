@@ -4,19 +4,14 @@ import java.io.*;
 
 public class WriteHistoryMsg implements Closeable {
     DataOutputStream historyMsg;
-    File out;
-    public WriteHistoryMsg() throws FileNotFoundException {
-        out = new File(Config.getPath() + Config.getLogin());
-        if(out.exists()){
-            out.mkdirs();
-        }
-        historyMsg = new DataOutputStream(new FileOutputStream(out, true));
 
+    public WriteHistoryMsg() throws IOException {
+        historyMsg = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(Config.getHistory(), true), 512));
     }
 
     public void write(String msg){
         try {
-            historyMsg.writeUTF(msg);
+            historyMsg.writeUTF("\n" + msg);
         } catch (IOException e) {
             e.printStackTrace();
         }

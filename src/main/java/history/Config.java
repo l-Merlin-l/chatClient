@@ -1,18 +1,21 @@
 package history;
 
+import java.io.File;
+import java.io.IOException;
+
 public class Config {
-    private static String login;
-    private static final String path = "history/";
+    private static final String PATH = "history/";
+    private static File history;
 
-    public static void setLogin(String newLogin){
-        login = newLogin;
+    public static void setLogin(String login){
+        history = new File(PATH + login + ".txt");
     }
 
-    protected static String getLogin(){
-        return login;
-    }
-
-    protected static String getPath(){
-        return path;
+    protected static File getHistory() throws IOException {
+        new File(PATH).mkdirs();
+        if (!history.exists()){
+            history.createNewFile();
+        }
+        return history;
     }
 }
